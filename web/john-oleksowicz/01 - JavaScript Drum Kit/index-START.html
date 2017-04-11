@@ -65,6 +65,10 @@
           element.classList.remove('playing');
       }
 
+      function rewind(audioElement) {
+          audioElement.currentTime = 0;
+      }
+
       function playSound(event) {
           const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
 
@@ -77,7 +81,7 @@
           startPlaying(key);
 
           // Allow for playing one after another
-          audio.currentTime = 0;
+          rewind(audio);
 
           audio.play();
       }
