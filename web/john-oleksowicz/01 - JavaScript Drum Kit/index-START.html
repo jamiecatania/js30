@@ -69,14 +69,21 @@
         this.currentTime = 0;
       };
 
+      function getElementByKeyCode(elementType, keyCode) {
+          const selector = `${elementType}[data-key="${keyCode}"]`;
+          const element = document.querySelector(selector);
+
+          return element;
+      }
+
       function playSound(event) {
-          const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
+          const audio = getElementByKeyCode('audio', event.keyCode);
 
           if (!audio) {
               return;
           }
 
-          const key = document.querySelector(`div[data-key="${event.keyCode}"`);
+          const key = getElementByKeyCode('div', event.keyCode);
 
           startPlaying(key);
 
