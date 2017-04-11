@@ -69,6 +69,11 @@
         this.currentTime = 0;
       };
 
+      HTMLAudioElement.prototype.playImmediately = function() {
+          this.rewind();
+          this.play();
+      };
+
       function getElementByKeyCode(elementType, keyCode) {
           const selector = `${elementType}[data-key="${keyCode}"]`;
           const element = document.querySelector(selector);
@@ -88,9 +93,7 @@
           startPlaying(key);
 
           // Allow for playing one after another
-          audio.rewind();
-
-          audio.play();
+          audio.playImmediately();
       }
 
       function removeTransition(e) {
