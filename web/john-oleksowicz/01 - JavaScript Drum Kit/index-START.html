@@ -56,20 +56,21 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
-  window.addEventListener('keydown', function(event) {
-     const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
+  <script>
+      window.addEventListener('keydown', function (event) {
+          const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
 
-     if (!audio) {
-         return;
-     }
+          if (!audio) {
+              return;
+          }
 
-     audio.currentTime = 0;
+          const key = document.querySelector(`div[data-key="${event.keyCode}"`);
 
-     audio.play();
+          audio.currentTime = 0;
 
-  });
-</script>
+          audio.play();
+      });
+  </script>
 
 
 </body>
