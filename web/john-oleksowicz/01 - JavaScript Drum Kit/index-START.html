@@ -81,14 +81,14 @@
           return element;
       }
 
-      function playSound(event) {
-          const audio = getElementByKeyCode('audio', event.keyCode);
+      function maybePlaySound(e) {
+          const audio = getElementByKeyCode('audio', e.keyCode);
 
           if (!audio) {
               return;
           }
 
-          const key = getElementByKeyCode('div', event.keyCode);
+          const key = getElementByKeyCode('div', e.keyCode);
 
           startPlaying(key);
 
@@ -107,7 +107,7 @@
       const keys = document.querySelectorAll('.key');
       keys.forEach(key => key.addEventListener('transitionend', removeTransition));
 
-      window.addEventListener('keydown', playSound);
+      window.addEventListener('keydown', maybePlaySound);
   </script>
 
 
