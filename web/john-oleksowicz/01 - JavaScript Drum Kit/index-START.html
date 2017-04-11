@@ -57,12 +57,12 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
   <script>
-      function startPlaying(element) {
-          element.classList.add('playing');
+      function startPlaying(key) {
+          key.classList.add('playing');
       }
 
-      function stopPlaying(element) {
-          element.classList.remove('playing');
+      function stopPlaying(key) {
+          key.classList.remove('playing');
       }
 
       HTMLAudioElement.prototype.rewind = function() {
