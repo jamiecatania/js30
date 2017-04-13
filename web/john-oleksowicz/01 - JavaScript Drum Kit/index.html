@@ -57,16 +57,6 @@
         <audio data-key="76" src="sounds/tink.wav"></audio>
 
         <script>
-
-
-            function startPlaying(key) {
-                key.classList.add('playing');
-            }
-
-            function stopPlaying(key) {
-                key.classList.remove('playing');
-            }
-
             HTMLAudioElement.prototype.rewind = function () {
                 this.currentTime = 0;
             };
@@ -76,40 +66,54 @@
                 this.play();
             };
 
-            function getElementByKeyCode(elementType, keyCode) {
-                const selector = `${elementType}[data-key="${keyCode}"]`;
-                const element = document.querySelector(selector);
+            class Drumkit {
+                enable() {
+                    this
+                        .getKeys()
+                        .forEach(key => key.addEventListener('transitionend', e => this.removeTransition(e)));
 
-                return element;
-            }
-
-            function maybePlaySound(e) {
-                const audio = getElementByKeyCode('audio', e.keyCode);
-
-                if (!audio) {
-                    return;
+                    window.addEventListener('keydown', e => this.maybePlaySound(e));
                 }
 
-                const key = getElementByKeyCode('div', e.keyCode);
+                getElementByKeyCode(elementType, keyCode) {
+                    const selector = `${elementType}[data-key="${keyCode}"]`;
+                    const element = document.querySelector(selector);
 
-                startPlaying(key);
-
-                // Allow for playing one after another
-                audio.playImmediately();
-            }
-
-            function removeTransition(e) {
-                if (e.propertyName !== 'transform') {
-                    return;
+                    return element;
                 }
 
-                stopPlaying(this);
+                maybePlaySound(e) {
+                    const audio = this.getElementByKeyCode('audio', e.keyCode);
+
+                    if (!audio) {
+                        return;
+                    }
+
+                    const key = this.getElementByKeyCode('div', e.keyCode);
+
+                    key.classList.add('playing');
+
+                    // Allow for playing one after another
+                    audio.playImmediately();
+                }
+
+                removeTransition(e) {
+                    if (e.propertyName !== 'transform') {
+                        return;
+                    }
+
+                    e.target.classList.remove('playing');
+                }
+
+                getKeys() {
+                    const keys = document.querySelectorAll('.key');
+                    return keys;
+                }
             }
 
-            const keys = document.querySelectorAll('.key');
-            keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+            const drumkit = new Drumkit();
+            drumkit.enable();
 
-            window.addEventListener('keydown', maybePlaySound);
         </script>
 
 
