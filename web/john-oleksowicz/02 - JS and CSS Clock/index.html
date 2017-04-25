@@ -86,17 +86,22 @@
             function setDate() {
                 const now = new Date();
 
-                rotateElement(secondHand, now.getSeconds());
-                rotateElement(minutesHand, now.getMinutes());
-                rotateElement(hourHand, now.getHours());
+                rotateElement(secondHand, now.getSeconds(), 60);
+                rotateElement(minutesHand, now.getMinutes(), 60);
+
+                let hours = now.getHours();
+                if (hours > 12) {
+                    hours = hours - 12;
+                }
+                rotateElement(hourHand, hours, 12);
             }
 
-            function rotateElement(element, number) {
+            function rotateElement(element, number, base) {
                 const degreeTransformRegex = /rotate\((.*)deg\)/g;
                 const matches = degreeTransformRegex.exec(element.style.transform);
                 const initialRotation = matches[1];
 
-                const newRotation = ((number / 60) * 360) + 90;
+                const newRotation = ((number / base) * 360) + 90;
 
                 if (newRotation < initialRotation) {
                     element.style.transition = "none";
