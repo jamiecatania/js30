@@ -6,6 +6,11 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <div class="loop-container">
+            <label for="loopDelay">Delay</label><br/>
+            <input type="range" id="loopDelay" name="loopDelay" min="100" max="500" value="200"/><br/>
+            <input type="text" maxlength="16" name="loop"/>
+        </div>
 
         <div class="keys">
             <div data-key="65" class="key">
@@ -111,8 +116,92 @@
                 }
             }
 
+            class Loop {
+                constructor(keys, delay) {
+                    this.setDelay(delay);
+                    this.setKeys(keys)
+                    keys.addEventListener('keyup', (e) => this.updateKeys(e));
+                    delay.addEventListener('change', (e) => this.updateDelay(e));
+                }
+
+                setKeys(keysInput) {
+                    this.keys = this.padEnd(keysInput.value, 16).split('');
+                    this.resetLoop();
+                }
+
+                getKeyCodeFromLetter(letter) {
+                    switch (letter.toLowerCase()) {
+                        case 'a':
+                            return 65;
+                        case 's':
+                            return 83;
+                        case 'd':
+                            return 68;
+                        case 'f':
+                            return 70;
+                        case 'g':
+                            return 71;
+                        case 'h':
+                            return 72;
+                        case 'j':
+                            return 74;
+                        case 'k':
+                            return 75;
+                        case 'l':
+                            return 76;
+
+                    }
+                    return false;
+                }
+
+                resetLoop() {
+                    if (this.interval) {
+                        clearInterval(this.interval);
+                    }
+                    let i = 0;
+                    this.interval = setInterval(() => {
+                        if (i >= 16) {
+                            i = 0;
+                        }
+                        let keyCode = this.getKeyCodeFromLetter(this.keys[i]);
+
+                        if (keyCode) {
+                            let e = new Event('keydown');
+                            e.keyCode = keyCode;
+                            window.dispatchEvent(e);
+                        }
+                        i++;
+                    }, this.delay);
+                }
+
+                padEnd(string, length, character='.') {
+                    while (string.length < length) {
+                        string = string + character;
+                    }
+
+                    return string;
+                }
+
+                setDelay(delayInput) {
+                    this.delay = delayInput.value;
+                }
+
+                updateKeys(e) {
+                    this.setKeys(e.target);
+                }
+
+                updateDelay(e) {
+                    this.setDelay(e.target);
+                    this.resetLoop();
+                }
+            }
+
             const drumkit = new Drumkit();
             drumkit.enable();
+
+            const keys = document.querySelector('input[name="loop"]');
+            const delay = document.querySelector('input[name="loopDelay"]');
+            const loop = new Loop(keys, delay);
 
         </script>
 
