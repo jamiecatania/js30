@@ -11,39 +11,45 @@
   <div class="keys">
     <div data-key="65" class="key">
       <kbd>A</kbd>
-      <span class="sound">clap</span>
+      <span class="label">clap</span>
     </div>
     <div data-key="83" class="key">
       <kbd>S</kbd>
-      <span class="sound">hihat</span>
+      <span class="label">hihat</span>
     </div>
     <div data-key="68" class="key">
       <kbd>D</kbd>
-      <span class="sound">kick</span>
+      <span class="label">kick</span>
     </div>
     <div data-key="70" class="key">
       <kbd>F</kbd>
-      <span class="sound">openhat</span>
+      <span class="label">openhat</span>
     </div>
     <div data-key="71" class="key">
       <kbd>G</kbd>
-      <span class="sound">boom</span>
+      <span class="label">boom</span>
     </div>
     <div data-key="72" class="key">
       <kbd>H</kbd>
-      <span class="sound">ride</span>
+      <span class="label">ride</span>
     </div>
     <div data-key="74" class="key">
       <kbd>J</kbd>
-      <span class="sound">snare</span>
+      <span class="label">snare</span>
     </div>
     <div data-key="75" class="key">
       <kbd>K</kbd>
-      <span class="sound">tom</span>
+      <span class="label">tom</span>
     </div>
     <div data-key="76" class="key">
       <kbd>L</kbd>
-      <span class="sound">tink</span>
+      <span class="label">tink</span>
+    </div>
+    <div class="beatbox">
+      <div data-key="66" class="key">
+        <kbd>B</kbd>
+        <span class="label">GIMME A BEAT</span>
+      </div>
     </div>
   </div>
 
@@ -63,19 +69,73 @@
     e.target.classList.remove('playing');
   }
 
-  function playSound(e) {
+  function playBeat() {
+      //Select all of the sounds we'll need
+      const kickAudio = document.querySelector(`audio[data-key="68"]`);
+      const hihatAudio = document.querySelector(`audio[data-key="83"]`);
+      const clapAudio = document.querySelector(`audio[data-key="65"]`);
+
+      kickAudio.play(); //Play the kick once to get the beat going.
+
+      //Continue looping through the audio until the button is pressed again.
+      let kickPlaying = window.setInterval(function() {
+        kickAudio.play();
+      }, 500);
+
+      let hihatPlaying = window.setInterval(function() {
+        hihatAudio.play();
+      }, 750);
+
+      let clapPlaying = window.setInterval(function() {
+        clapAudio.play();
+      }, 1000);
+  }
+
+  function playSingleSound(e) {
     const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-    const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
     if (!audio) return;
 
-    key.classList.add('playing');
     audio.currentTime = 0;
     audio.play();
   }
 
+  function animateButton(key) {
+    //const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+    key.classList.add('playing');
+  }
+
+  function handleBeat(key) {
+
+    if (key.classList.contains('jamming')) {
+      //Stop audio from playing
+      clearInterval(kickPlaying).call();
+      clearInterval(hihatPlaying);
+      clearInterval(clapPlaying);
+
+      key.classList.remove('jamming');
+    } else {
+      //Set a class to mark the beat as 'jamming'
+      key.classList.add('jamming');
+
+      playBeat();
+    }
+  }
+
+  function getCorrectAudio(e) {
+    const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+    animateButton(key);
+
+    console.log(e.keyCode);
+    if (e.keyCode == "66") {
+      handleBeat(key);
+    } else {
+      playSingleSound(e);
+    }
+  }
+
   const keys = Array.from(document.querySelectorAll('.key'));
   keys.forEach(key => key.addEventListener('transitionend', removeTransition));
-  window.addEventListener('keydown', playSound);
+  window.addEventListener('keydown', getCorrectAudio);
 </script>
 
 
