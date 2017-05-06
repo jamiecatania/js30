@@ -61,32 +61,32 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
+  <script>
   function removeTransition(e) {
     if (e.propertyName !== 'transform') return;
     e.target.classList.remove('playing');
   }
 
   function playBeat() {
-      //Select all of the sounds we'll need
-      const kickAudio = document.querySelector(`audio[data-key="68"]`);
-      const hihatAudio = document.querySelector(`audio[data-key="83"]`);
-      const clapAudio = document.querySelector(`audio[data-key="65"]`);
+    //Select all of the sounds we'll need
+    const kickAudio = document.querySelector(`audio[data-key="68"]`);
+    const hihatAudio = document.querySelector(`audio[data-key="83"]`);
+    const clapAudio = document.querySelector(`audio[data-key="65"]`);
 
-      kickAudio.play(); //Play the kick once to get the beat going.
+    kickAudio.play(); //Play the kick once to get the beat going.
 
-      //Continue looping through the audio until the button is pressed again.
-      kickPlaying = window.setInterval(function() {
-        kickAudio.play();
-      }, 500);
+    //Continue looping through the audio until the button is pressed again.
+    kickPlaying = window.setInterval(function() {
+      kickAudio.play();
+    }, 500);
 
-      hihatPlaying = window.setInterval(function() {
-        hihatAudio.play();
-      }, 750);
+    hihatPlaying = window.setInterval(function() {
+      hihatAudio.play();
+    }, 750);
 
-      clapPlaying = window.setInterval(function() {
-        clapAudio.play();
-      }, 1000);
+    clapPlaying = window.setInterval(function() {
+      clapAudio.play();
+    }, 1000);
   }
 
   function playSingleSound(e) {
@@ -141,7 +141,7 @@
   const keys = Array.from(document.querySelectorAll('.key'));
   keys.forEach(key => key.addEventListener('transitionend', removeTransition));
   window.addEventListener('keydown', getCorrectAudio);
-</script>
+  </script>
 
 
 </body>

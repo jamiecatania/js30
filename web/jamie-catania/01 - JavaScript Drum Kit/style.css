@@ -44,17 +44,20 @@ kbd {
     color: #ffc600;
 }
 .jamming {
-    transform: scale(1.05);
-    box-shadow: 0 0 1rem #00FFEE;
+    box-shadow: 0 0 1rem #ffc600;
     animation: jamming 1s infinite;
+}
+
+.jamming * {
+  animation: pulsing .5s infinite;
 }
 
 
 @-webkit-keyframes jamming {
   0% {
-    -webkit-box-shadow: 0 0 0 0 rgba(0,255,238, 0.4);
+    -webkit-box-shadow: 0 0 0 0 rgba(255,198,0, 1.0);
   }
-  70% {
+  50% {
       -webkit-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
   }
   100% {
@@ -63,15 +66,38 @@ kbd {
 }
 @keyframes jamming {
   0% {
-    -moz-box-shadow: 0 0 0 0 rgba(0,255,238, 0.4);
-    box-shadow: 0 0 0 0 rgba(0,255,238, 0.4);
+    -moz-box-shadow: 0 0 0 0 rgba(255,198,0, 1.0);
+    box-shadow: 0 0 0 0 rgba(255,198,0, 1.0);
   }
-  70% {
+  50% {
       -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
       box-shadow: 0 0 0 10px rgba(204,169,44, 0);
   }
   100% {
       -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
       box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+  }
+}
+
+@-webkit-keyframes pulsing {
+  0% {
+    transform: scale(1.0);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}
+@keyframes pulsing {
+  0% {
+    transform: scale(1.0);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1.2);
   }
 }
