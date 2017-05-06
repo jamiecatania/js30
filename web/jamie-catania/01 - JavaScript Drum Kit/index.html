@@ -45,12 +45,10 @@
       <kbd>L</kbd>
       <span class="label">tink</span>
     </div>
-    <div class="beatbox">
       <div data-key="66" class="key">
         <kbd>B</kbd>
         <span class="label">GIMME A BEAT</span>
       </div>
-    </div>
   </div>
 
   <audio data-key="65" src="sounds/clap.wav"></audio>
@@ -78,15 +76,15 @@
       kickAudio.play(); //Play the kick once to get the beat going.
 
       //Continue looping through the audio until the button is pressed again.
-      let kickPlaying = window.setInterval(function() {
+      kickPlaying = window.setInterval(function() {
         kickAudio.play();
       }, 500);
 
-      let hihatPlaying = window.setInterval(function() {
+      hihatPlaying = window.setInterval(function() {
         hihatAudio.play();
       }, 750);
 
-      let clapPlaying = window.setInterval(function() {
+      clapPlaying = window.setInterval(function() {
         clapAudio.play();
       }, 1000);
   }
@@ -108,24 +106,31 @@
 
     if (key.classList.contains('jamming')) {
       //Stop audio from playing
-      clearInterval(kickPlaying).call();
+      clearInterval(kickPlaying);
       clearInterval(hihatPlaying);
       clearInterval(clapPlaying);
+
+      statusLabel = 'GIMME A BEAT';
 
       key.classList.remove('jamming');
     } else {
       //Set a class to mark the beat as 'jamming'
       key.classList.add('jamming');
 
+      //Change the button label
+      statusLabel = 'KILL DAT BEAT';
+
       playBeat();
     }
+
+    console.log(key.getElementsByClassName("label")[0]);
+    key.getElementsByClassName("label")[0].innerHTML = statusLabel;
   }
 
   function getCorrectAudio(e) {
     const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
     animateButton(key);
 
-    console.log(e.keyCode);
     if (e.keyCode == "66") {
       handleBeat(key);
     } else {
