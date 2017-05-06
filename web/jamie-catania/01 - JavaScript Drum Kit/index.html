@@ -45,10 +45,10 @@
       <kbd>L</kbd>
       <span class="label">tink</span>
     </div>
-      <div data-key="66" class="key">
-        <kbd>B</kbd>
-        <span class="label">GIMME A BEAT</span>
-      </div>
+    <div data-key="66" class="key" id="beatboxBtn">
+      <kbd>B</kbd>
+      <span class="label">GIMME A BEAT</span>
+    </div>
   </div>
 
   <audio data-key="65" src="sounds/clap.wav"></audio>
@@ -98,8 +98,9 @@
   }
 
   function animateButton(key) {
-    //const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
-    key.classList.add('playing');
+    if (key.id !== 'beatboxBtn') {
+      key.classList.add('playing');
+    }
   }
 
   function handleBeat(key) {
@@ -123,7 +124,6 @@
       playBeat();
     }
 
-    console.log(key.getElementsByClassName("label")[0]);
     key.getElementsByClassName("label")[0].innerHTML = statusLabel;
   }
 
