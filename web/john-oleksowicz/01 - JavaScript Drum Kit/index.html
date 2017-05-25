@@ -9,6 +9,7 @@
         <div class="keys">
             <div class="loop-container">
                 <input type="range" id="loopDelay" name="loopDelay" min="100" max="300" value="200" step="10"/><br/>
+                <input type="button" id="clearLoop" value="Clear Loop"/>
             </div><br/>
             <div data-key="65" class="key">
                 <kbd>A</kbd>
@@ -199,6 +200,7 @@
                     this.beat = 1;
                     this.play();
                     document.querySelector('#loopDelay').addEventListener('change', e => this.updateDelay(e));
+                    document.querySelector('#clearLoop').addEventListener('click', () => this.clearLoop());
                 }
 
                 pressKey(keyCode) {
@@ -225,6 +227,13 @@
 
                 updateDelay(e) {
                     this.delay = e.target.value;
+                }
+
+                clearLoop() {
+                    const checkboxes = document.querySelectorAll('input[name="loop"]');
+                    for (let i = 0; i < checkboxes.length; i++) {
+                        checkboxes[i].checked = false;
+                    }
                 }
             }
 
