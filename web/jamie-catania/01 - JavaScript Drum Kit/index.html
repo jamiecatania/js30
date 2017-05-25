@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="label">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="label">hihat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="label">kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="label">openhat</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="label">boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="label">ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="label">snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="label">tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="label">tink</span>
+    </div>
+    <div data-key="66" class="key" id="beatboxBtn">
+      <kbd>B</kbd>
+      <span class="label">GIMME A BEAT</span>
+    </div>
+  </div>
+
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+  <script>
+  function removeTransition(e) {
+    if (e.propertyName !== 'transform') return;
+    e.target.classList.remove('playing');
+  }
+
+  function playBeat() {
+    //Select all of the sounds we'll need
+    const kickAudio = document.querySelector(`audio[data-key="68"]`);
+    const hihatAudio = document.querySelector(`audio[data-key="83"]`);
+    const clapAudio = document.querySelector(`audio[data-key="65"]`);
+
+    kickAudio.play(); //Play the kick once to get the beat going.
+
+    //Continue looping through the audio until the button is pressed again.
+    kickPlaying = window.setInterval(function() {
+      kickAudio.play();
+    }, 500);
+
+    hihatPlaying = window.setInterval(function() {
+      hihatAudio.play();
+    }, 750);
+
+    clapPlaying = window.setInterval(function() {
+      clapAudio.play();
+    }, 1000);
+  }
+
+  function playSingleSound(e) {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    if (!audio) return;
+
+    audio.currentTime = 0;
+    audio.play();
+  }
+
+  function animateButton(key) {
+    if (key.id !== 'beatboxBtn') {
+      key.classList.add('playing');
+    }
+  }
+
+  function handleBeat(key) {
+
+    if (key.classList.contains('jamming')) {
+      //Stop audio from playing
+      clearInterval(kickPlaying);
+      clearInterval(hihatPlaying);
+      clearInterval(clapPlaying);
+
+      statusLabel = 'GIMME A BEAT';
+
+      key.classList.remove('jamming');
+    } else {
+      //Set a class to mark the beat as 'jamming'
+      key.classList.add('jamming');
+
+      //Change the button label
+      statusLabel = 'KILL DAT BEAT';
+
+      playBeat();
+    }
+
+    key.getElementsByClassName("label")[0].innerHTML = statusLabel;
+  }
+
+  function getCorrectAudio(e) {
+    const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+    animateButton(key);
+
+    if (e.keyCode == "66") {
+      handleBeat(key);
+    } else {
+      playSingleSound(e);
+    }
+  }
+
+  const keys = Array.from(document.querySelectorAll('.key'));
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  window.addEventListener('keydown', getCorrectAudio);
+  </script>
+
+
+</body>
+</html>
