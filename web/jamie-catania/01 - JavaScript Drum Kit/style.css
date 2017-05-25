@@ -43,15 +43,20 @@ kbd {
     letter-spacing: .1rem;
     color: #ffc600;
 }
-.jamming {
+.jamming,
+.recording-in-progress {
     box-shadow: 0 0 1rem #ffc600;
     animation: jamming 1s infinite;
 }
 
-.jamming * {
+.jamming *,
+.recording-in-progress * {
   animation: pulsing .5s infinite;
 }
 
+.row-two {
+  display: block;
+}
 
 @-webkit-keyframes jamming {
   0% {

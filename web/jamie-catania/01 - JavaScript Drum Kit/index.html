@@ -6,8 +6,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-
   <div class="keys">
     <div data-key="65" class="key">
       <kbd>A</kbd>
@@ -49,6 +47,16 @@
       <kbd>B</kbd>
       <span class="label">GIMME A BEAT</span>
     </div>
+    <div class="row-two">
+    <div data-key="82" class="key" id="recordBtn">
+      <kbd>R</kbd>
+      <span class="label">Record</span>
+    </div>
+    <div data-key="80" class="key" id="playBtn">
+      <kbd>P</kbd>
+      <span class="label">Play</span>
+    </div>
+  </div>
   </div>
 
   <audio data-key="65" src="sounds/clap.wav"></audio>
@@ -62,6 +70,8 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
   <script>
+let lastRecording = [];
+
   function removeTransition(e) {
     if (e.propertyName !== 'transform') return;
     e.target.classList.remove('playing');
@@ -127,20 +137,84 @@
     key.getElementsByClassName("label")[0].innerHTML = statusLabel;
   }
 
-  function getCorrectAudio(e) {
+  function handleRecord(key) {
+    //Are we currently recording?
+    if (key.classList.contains('recording-in-progress')) {
+      key.classList.remove('recording-in-progress');
+      stopRecording();
+
+      statusLabel = 'Record';
+    } else {
+      key.classList.add('recording-in-progress');
+      statusLabel = 'Stop Recording';
+
+      startRecording(key);
+    }
+
+    key.getElementsByClassName("label")[0].innerHTML = statusLabel;
+  }
+
+  function startRecording() {
+    lastRecording = [];
+    let recordingKeys = document.getElementsByClassName("key");
+
+    for (let j=0; j<recordingKeys.length; j++) {
+      recordingKeys[j].classList.add('recording');
+    }
+  }
+
+  function stopRecording() {
+    let recordingKeys = document.getElementsByClassName("key");
+
+    for (let j=0; j<recordingKeys.length; j++) {
+      recordingKeys[j].classList.remove('recording');
+    }
+    console.log(lastRecording);
+  }
+
+  function playRecording(key) {
+    let curIndex = 0;
+
+    let playBeat = setInterval(function () {
+      if (curIndex > lastRecording.length) {
+        key.classList.remove('jamming');
+        clearInterval(playBeat);
+      }
+      const audio = document.querySelector(`audio[data-key="${lastRecording[curIndex]}"]`);
+      if (!audio) return;
+
+      audio.play();
+      curIndex++;
+    }, 500);
+  }
+
+  function handleKeyPress(e) {
     const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+    if (key === null) {
+      return;
+    }
+
     animateButton(key);
 
     if (e.keyCode == "66") {
       handleBeat(key);
+    } else if (e.keyCode == "82") {
+      handleRecord(key);
+    } else if (e.keyCode == "80") {
+      playRecording(key);
+      key.classList.add('jamming');
     } else {
+      if (key.classList.contains('recording')) {
+        lastRecording.push(e.keyCode);
+      }
+
       playSingleSound(e);
     }
   }
 
   const keys = Array.from(document.querySelectorAll('.key'));
   keys.forEach(key => key.addEventListener('transitionend', removeTransition));
-  window.addEventListener('keydown', getCorrectAudio);
+  window.addEventListener('keydown', handleKeyPress);
   </script>
 
 
