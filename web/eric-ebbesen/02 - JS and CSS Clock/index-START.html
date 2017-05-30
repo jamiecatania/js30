@@ -52,18 +52,17 @@
     }
 
     .clock-face {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transform: translateY(-3px); /* account for the height of the clock hands */
+      position: relative; /* x-axis */
+      height: 100%; /* where hands start (y-axis) */
     }
 
     .clock-face-hour {
-      margin: auto;
-      position: relative;
-      width: 80%;
-      height: 80%;
-      transform: translateY(32px); /* account for the height of the clock hands */
+      width: 80%; /* length of hour hand */
+      height: 80%; /* where hour hand starts (y-axis) */
+
+      /* without margin and transform, the hour hand is just as long as the minute hand */
+      margin: auto; /* x-axis */
+      transform: translateY(32px); /* x-axis */
     }
 
     .hand {
