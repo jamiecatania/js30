@@ -7,6 +7,7 @@ class VideoPlayer {
 		this.toggle = this.container.querySelector('.toggle');
 		this.skipButtons = this.container.querySelectorAll('[data-skip]');
 		this.ranges = this.container.querySelectorAll('.player__slider');
+		this.fullscreenToggle = this.container.querySelector('.player__fullscreen');
 		this.mouseDown = false;
 		this.registerEventListners();
 	}
@@ -34,6 +35,12 @@ class VideoPlayer {
 		});
 		this.progress.addEventListener('mousedown', () => this.mouseDown = true);
 		this.progress.addEventListener('mouseup', () => this.mouseDown = false);
+
+		this.fullscreenToggle.addEventListener('click', () => this.toggleFullscreen());
+	}
+
+	toggleFullscreen() {
+		this.video.webkitRequestFullscreen();
 	}
 
 	updateButton() {
