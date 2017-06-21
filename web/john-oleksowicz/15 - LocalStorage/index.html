@@ -28,7 +28,7 @@
         <script>
 			const addItems = document.querySelector('.add-items');
 			const itemsList = document.querySelector('.plates');
-			const items = [];
+			const items = getItems() || [];
 
 			function addItem(e) {
 				e.preventDefault();
@@ -36,13 +36,14 @@
 				const item = {
 					text,
 					done: false
-				}
+				};
 				items.push(item);
                 populateList(itemsList, items);
 				this.reset();
 			}
 
 			function populateList(platesList, plates = []) {
+				saveItems(plates);
 				platesList.innerHTML = plates.map((plate, i) => {
 					return `
                         <li>
@@ -53,7 +54,30 @@
                 }).join('');
             }
 
+            function saveItems(items) {
+				localStorage.setItem('items', JSON.stringify(items));
+            }
+
+            function getItems() {
+				return JSON.parse(localStorage.getItem('items'));
+            }
+
+            function toggleDone(e) {
+				if (!e.target.matches('input')) {
+					return;
+                }
+                const element = e.target;
+				const index = element.dataset.index;
+
+				items[index].done = !items[index].done;
+				saveItems(items);
+            }
+
 			addItems.addEventListener('submit', addItem);
+
+			itemsList.addEventListener('click', toggleDone);
+
+			populateList(itemsList, items);
 
         </script>
 
