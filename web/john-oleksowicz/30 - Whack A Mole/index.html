@@ -57,7 +57,7 @@
  }
 
  function peep() {
-   const time = randTime(200, 122000);
+   const time = randTime(200, 1000);
    const hole = randHole(holes);
    hole.classList.add('up');
    setTimeout(() => {
@@ -71,6 +71,11 @@
  function bonk(e) {
    if (!e.isTrusted) {
      console.log('Don\'t cheat, jerk.');
+     return;
+   }
+
+   if (! this.parentElement.classList.contains('up')) {
+     // already scored
      return;
    }
 
